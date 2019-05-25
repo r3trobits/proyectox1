@@ -4,10 +4,25 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+
+//Aquí inicia lo de mongoose
+var mongoose = require('mongoose');
+var Alumno = require('./models/comida.js');
+var user='reyesg';
+var password='hola';
+
+mongoose.connect('mongodb+srv://'+user+':'+password+'@cluster0-6yskq.gcp.mongodb.net/facultadDB?retryWrites=true', {
+  useNewUrlParser: true
+}).then(() => { console.log('Conectado a Mongo DB Atlas')})
+.catch(err => console.log(err));
+
+//termina mongoose
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var comidaRouter=require('./routes/food.js');
 
 var app = express();
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,6 +36,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/api/yum', comidaRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
